@@ -1,11 +1,816 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BLSC Website</title>
+  <title>Bulgarian Language & Script Corpus (BLSC)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="Bulgarian Language & Script Corpus (BLSC) – national-scale open corpus of Bulgarian language and script with rich linguistic metadata.">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #020617;
+      --card: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.15);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --danger: #f97373;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to bottom, rgba(15,23,42,0.96), rgba(15,23,42,0.85));
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #f9fafb 0, #e5e7eb 25%, #b91c1c 26%, #7f1d1d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #f9fafb;
+      box-shadow: 0 0 0 1px rgba(15,23,42,0.9), 0 12px 24px rgba(0,0,0,0.8);
+    }
+
+    .logo span:last-child {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+    }
+
+    .nav-links a:hover {
+      background: rgba(15,23,42,0.9);
+      text-decoration: none;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1.75rem 1.25rem 3rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 2rem;
+      align-items: center;
+      padding: 1.5rem 1.25rem 2.25rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(148,163,184,0.35);
+      background:
+        radial-gradient(circle at 0 0, rgba(56,189,248,0.22), transparent 60%),
+        radial-gradient(circle at 100% 0, rgba(129,140,248,0.18), transparent 55%),
+        linear-gradient(to bottom right, rgba(15,23,42,0.98), rgba(2,6,23,0.98));
+      box-shadow:
+        0 30px 80px rgba(15,23,42,0.9),
+        inset 0 0 0 1px rgba(15,23,42,0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0, rgba(15,23,42,0), rgba(15,23,42,0.9));
+      pointer-events: none;
+    }
+
+    .hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.15rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 14px rgba(34,197,94,0.95);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.9rem, 4vw, 2.4rem);
+      margin: 0.1rem 0 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(to right, #e5e7eb, #38bdf8, #a5b4fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 32rem;
+    }
+
+    .hero-sub small {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .hero-actions {
+      margin-top: 1.1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 0.55rem 0.95rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #0ea5e9, #22c55e);
+      color: #0b1120;
+      box-shadow: 0 10px 30px rgba(8,47,73,0.8);
+    }
+
+    .btn-primary:hover {
+      text-decoration: none;
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: rgba(15,23,42,0.9);
+      border-color: rgba(148,163,184,0.6);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .tiny {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    .hero-metrics {
+      border-radius: 1rem;
+      background: rgba(15,23,42,0.82);
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 0.85rem 0.9rem;
+      box-shadow: 0 18px 45px rgba(15,23,42,0.9);
+      font-size: 0.8rem;
+    }
+
+    .hero-metrics h2 {
+      margin: 0 0 0.4rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .metric {
+      padding: 0.55rem 0.6rem;
+      border-radius: 0.8rem;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(51,65,85,0.9);
+    }
+
+    .metric small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.1rem;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    .metric span {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    section {
+      margin-top: 2.5rem;
+    }
+
+    section h2 {
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
+    }
+
+    section p {
+      font-size: 0.93rem;
+      color: var(--muted);
+      max-width: 52rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      border-radius: 1rem;
+      padding: 0.9rem 1rem;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(31,41,55,1);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.85);
+      font-size: 0.9rem;
+    }
+
+    .card h3 {
+      margin: 0 0 0.3rem;
+      font-size: 0.98rem;
+    }
+
+    .card p {
+      margin: 0.3rem 0 0;
+      font-size: 0.85rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.4rem;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      color: var(--muted);
+    }
+
+    .tag-accent {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    ul {
+      margin: 0.35rem 0 0.35rem 1.1rem;
+      padding: 0;
+      font-size: 0.87rem;
+      color: var(--muted);
+    }
+
+    li + li {
+      margin-top: 0.15rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.95);
+      border: 1px dashed rgba(148,163,184,0.8);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    .pill span {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.9fr);
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .muted-box {
+      border-radius: 0.9rem;
+      padding: 0.75rem 0.9rem;
+      background: rgba(15,23,42,0.85);
+      border: 1px dashed rgba(148,163,184,0.7);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .muted-box strong {
+      color: var(--text);
+    }
+
+    .faq-item {
+      margin-top: 0.4rem;
+      padding-top: 0.4rem;
+      border-top: 1px dashed rgba(31,41,55,0.9);
+      font-size: 0.87rem;
+    }
+
+    .faq-item strong {
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    footer {
+      border-top: 1px solid rgba(31,41,55,1);
+      padding: 1rem 1.25rem 1.8rem;
+      max-width: 1080px;
+      margin: 0 auto;
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    footer a {
+      color: var(--muted);
+    }
+
+    footer a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .danger {
+      color: var(--danger);
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-metrics {
+        order: -1;
+      }
+      .grid-3 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .grid-2, .two-cols {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+      main {
+        padding-top: 1.3rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>BLSC – Bulgarian Language & Script Corpus</h1>
-  <p>Site is alive, Браат!</p>
+<header>
+  <div class="nav">
+    <div class="logo">
+      <div class="logo-mark">АБ</div>
+      <div>
+        <div>BLSC</div>
+        <span>Bulgarian Language &amp; Script Corpus</span>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#datasets">Datasets</a>
+      <a href="#metadata">Linguistic metadata</a>
+      <a href="#annotation">Annotation</a>
+      <a href="#contribute">Get involved</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="about">
+    <div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        OPEN RESEARCH CORPUS • BULGARIAN
+      </div>
+      <h1>
+        Bulgarian Language &amp; <span>Script Corpus</span>
+      </h1>
+      <p class="hero-sub">
+        A national-scale open corpus of Bulgarian language and script, with
+        carefully curated sources, explicit licensing, and rich linguistic
+        metadata – designed for long-term research, evaluation and reproducible NLP.
+        <small>Български език, исторически периоди, ортографски реформи и
+          множество жанрове – в една последователна, документирана структура.</small>
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary"
+           href="https://github.com/blsc-org/blsc-core">
+          View core dataset repo
+          <span>↗</span>
+        </a>
+        <a class="btn btn-ghost"
+           href="https://github.com/blsc-org/blsc-core/blob/main/LINGUISTIC_METADATA_MODEL.md">
+          Linguistic metadata model
+        </a>
+      </div>
+      <div class="tiny">
+        All repositories under the <code>blsc-org</code> GitHub organization are
+        published under the MIT License (code) and open, corpus-appropriate licenses
+        (data).
+      </div>
+    </div>
+    <aside class="hero-metrics">
+      <h2>Design snapshot</h2>
+      <div class="metric-grid">
+        <div class="metric">
+          <small>Time axis</small>
+          <strong>1800 → today</strong>
+          <span>Periods aligned with orthographic reforms.</span>
+        </div>
+        <div class="metric">
+          <small>Layers</small>
+          <strong>Text → Corpus → Metadata</strong>
+          <span>JSON-based schema, language-agnostic.</span>
+        </div>
+        <div class="metric">
+          <small>Granularity</small>
+          <strong>Document-level IDs</strong>
+          <span>Stable identifiers, explicit rights and provenance.</span>
+        </div>
+        <div class="metric">
+          <small>Access</small>
+          <strong>Open &amp; forkable</strong>
+          <span>Git-native versioning, reproducible snapshots.</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section id="datasets">
+    <h2>Datasets &amp; repositories</h2>
+    <p>
+      The BLSC ecosystem is organized as a small set of focused repositories.
+      The core corpus and its metadata live in <code>blsc-core</code>, while
+      this site (<code>blsc-site</code>) hosts public-facing documentation.
+    </p>
+    <div class="grid grid-3">
+      <article class="card">
+        <h3>Core corpus (<code>blsc-core</code>)</h3>
+        <p>
+          Canonical texts with stable IDs, document-level JSON metadata, genre
+          and period classification, script information, and machine-readable
+          rights.
+        </p>
+        <ul>
+          <li>Bulgarian language only (for now).</li>
+          <li>Orthography &amp; period fields tied to historical reforms.</li>
+          <li>Explicit token counts and annotation-layer flags.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag tag-accent">dataset</span>
+          <span class="tag">json metadata</span>
+          <span class="tag">research-grade</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Website &amp; docs (<code>blsc-site</code>)</h3>
+        <p>
+          Static site (this repository) that aggregates documentation, design
+          notes, and reference links for the corpus and its tooling.
+        </p>
+        <ul>
+          <li>Describes the metadata model and annotation conventions.</li>
+          <li>Links to releases, issues and contribution guidelines.</li>
+          <li>Acts as a stable landing page for the project.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">documentation</span>
+          <span class="tag">GitHub Pages</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Future modules</h3>
+        <p>
+          Planned companion repositories may cover parallel corpora, evaluation
+          benchmarks, and task-specific subsets (e.g. legal, administrative,
+          historical).
+        </p>
+        <ul>
+          <li>All modules will share the same metadata backbone.</li>
+          <li>Clear separation between raw text, annotations and tooling.</li>
+          <li>Versioned releases for citation and reproducibility.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">roadmap</span>
+          <span class="tag">benchmarks</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="metadata">
+    <h2>Linguistic metadata model</h2>
+    <div class="two-cols">
+      <div>
+        <p>
+          Every document in the corpus is described by a compact JSON object.
+          Fields are intentionally stable, language-agnostic and future-proof,
+          so that additional modules (parallel corpora, annotations) can
+          reference the same identifiers.
+        </p>
+        <ul>
+          <li><strong>Document identity:</strong> <code>id</code>, author, title,
+            year, source type.</li>
+          <li><strong>Historical dimension:</strong> <code>period</code> tied to
+            orthographic reforms, with separate <code>orthography</code> field.</li>
+          <li><strong>Script &amp; language:</strong> script (Cyrillic/Latin),
+            dialect (if relevant), normalized-text flag.</li>
+          <li><strong>Annotation layers:</strong> booleans for morphological,
+            syntactic and other layers, so consumers know what is available.</li>
+          <li><strong>Rights:</strong> explicit license / public-domain marker
+            per document.</li>
+        </ul>
+        <div class="pill">
+          <span></span>
+          Full specification:
+          <a href="https://github.com/blsc-org/blsc-core/blob/main/LINGUISTIC_METADATA_MODEL.md">
+            LINGUISTIC_METADATA_MODEL.md
+          </a>
+        </div>
+      </div>
+      <div class="muted-box">
+        <strong>Example JSON</strong><br>
+        <code>
+          {"id":"blsc_00001231","author":"Иван Вазов","year":1894,<br>
+          &nbsp;"period":"pre_reform_1899","orthography":"pre_reform_1899",<br>
+          &nbsp;"genre":"fiction","script":"Cyrillic","token_count":1520,<br>
+          &nbsp;"morph_layer":false,"syntax_layer":false,<br>
+          &nbsp;"normalized_text":null,"rights":"public_domain"}
+        </code>
+        <br><br>
+        The corpus itself is not hard-coded into this site: the JSON metadata
+        lives in the core repository and can be processed with any tooling
+        (Python, R, SQL, etc.).
+      </div>
+    </div>
+  </section>
+
+  <section id="annotation">
+    <h2>Annotation guidelines</h2>
+    <p>
+      The BLSC project distinguishes clearly between the <em>corpus</em>
+      (texts + metadata) and optional <em>annotation layers</em>. Annotation
+      guidelines are versioned documents that describe how each layer is
+      produced and how it should be interpreted.
+    </p>
+    <div class="grid grid-2">
+      <article class="card">
+        <h3>Principles</h3>
+        <ul>
+          <li>Annotation is always <strong>documented and reproducible</strong>:
+            every layer has a guideline and a version.</li>
+          <li>Guidelines favour <strong>clarity over ideology</strong> – they
+            are designed to be used by both linguists and practitioners.</li>
+          <li>Whenever possible, categories are mapped to existing standards
+            (Universal Dependencies, etc.).</li>
+        </ul>
+        <p class="danger">
+          Annotation should never silently change the underlying text. Any
+          normalization or correction must be explicitly flagged.
+        </p>
+      </article>
+      <article class="card">
+        <h3>Guidelines document</h3>
+        <p>
+          A living document in the core repository describes the current
+          annotation layers and conventions:
+        </p>
+        <ul>
+          <li>Tokenization &amp; sentence segmentation.</li>
+          <li>Morphological features and POS tags.</li>
+          <li>Syntactic relations (if available).</li>
+          <li>Named entities and other semantic labels (future work).</li>
+        </ul>
+        <p>
+          See
+          <a href="https://github.com/blsc-org/blsc-core/blob/main/ANNOTATION_GUIDELINES.md">
+            ANNOTATION_GUIDELINES.md
+          </a>
+          for the current draft.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section id="contribute">
+    <h2>How to get involved</h2>
+    <p>
+      BLSC is intentionally designed as an open, collaborative effort. If you
+      work with Bulgarian language and would like to contribute, there are
+      several ways to help.
+    </p>
+    <div class="grid grid-3">
+      <article class="card">
+        <h3>Report issues &amp; ideas</h3>
+        <p>
+          Use the issue tracker in
+          <a href="https://github.com/blsc-org/blsc-core">blsc-core</a> for
+          anything related to the corpus, metadata schema, or documentation:
+        </p>
+        <ul>
+          <li>Bug reports or inconsistencies.</li>
+          <li>Requests for new metadata fields.</li>
+          <li>Suggestions for additional genres or periods.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Contribute data</h3>
+        <p>
+          If you control rights to suitable Bulgarian texts (public domain,
+          CC-licensed, or with explicit permission), you can propose adding
+          them to the corpus.
+        </p>
+        <ul>
+          <li>Provide basic bibliographic information.</li>
+          <li>Clarify licensing and provenance.</li>
+          <li>Open an issue first – do not send large files by email.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Help with annotation</h3>
+        <p>
+          As annotation layers mature, the project may organize focused
+          annotation sprints for specific phenomena (e.g. historical spelling,
+          dialect, named entities).
+        </p>
+        <ul>
+          <li>Follow the repository for announcements.</li>
+          <li>Comment on guideline drafts and edge cases.</li>
+          <li>Share evaluation scripts and baselines.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact &amp; governance</h2>
+    <div class="two-cols">
+      <div>
+        <p>
+          For questions that do not fit well into GitHub issues (sensitive data,
+          institutional collaborations, etc.) you can reach the maintainers via
+          email. Please keep technical questions on GitHub whenever possible so
+          that answers remain visible to everyone.
+        </p>
+        <ul>
+          <li><strong>Organization:</strong>
+            <a href="https://github.com/blsc-org">@blsc-org</a> on GitHub.</li>
+          <li><strong>Core repository:</strong>
+            <a href="https://github.com/blsc-org/blsc-core">blsc-core</a>.</li>
+          <li><strong>Website repository:</strong>
+            <a href="https://github.com/blsc-org/blsc-site">blsc-site</a>.</li>
+        </ul>
+      </div>
+      <div class="muted-box">
+        <strong>Email for conduct &amp; moderation</strong><br>
+        <a href="mailto:blsc-org@proton.me">blsc-org@proton.me</a><br><br>
+        This address can be used to report violations of the
+        <a href="https://github.com/blsc-org/blsc-core/blob/main/CODE_OF_CONDUCT.md">
+          Code of Conduct
+        </a>. All reports will be handled discretely and in line with the
+        enforcement guidelines in the repository.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <strong>Is the corpus “finished”?</strong>
+      No. BLSC is explicitly versioned and will evolve through well-documented
+      releases. Each snapshot can be cited and reproduced.
+    </div>
+    <div class="faq-item">
+      <strong>Can I use BLSC in commercial projects?</strong>
+      Code is MIT-licensed. Data usage depends on the rights field of each
+      document; public-domain texts are unrestricted, while others may impose
+      conditions. Always check the metadata.
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>
+    © <!-- keep it generic -->2025 Bulgarian Language &amp; Script Corpus (BLSC).
+    Content on this site is available under the MIT License where applicable.
+  </div>
+  <div>
+    Built with ♥ on <a href="https://pages.github.com/">GitHub Pages</a>.
+  </div>
+</footer>
 </body>
-</html>
+  </html>
